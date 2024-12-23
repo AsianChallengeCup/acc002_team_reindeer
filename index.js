@@ -72,8 +72,8 @@ const port = 3000;
 const server = http.createServer((req, res) => {
   let filePath = "." + req.url; // リクエストされたURLを基にファイルパスを作成
 
-  // デフォルトのルート（トップページの場合はindex.htmlを提供）
   if (filePath === "./") {
+    // デフォルトのルート（トップページの場合はindex.htmlを提供）
     filePath = "./index.html";
   } else if (filePath === "./user_") {
     filePath = "./user_index/user_index.html";
@@ -91,8 +91,22 @@ const server = http.createServer((req, res) => {
     if (error) {
       if (error.code === "ENOENT") {
         // ファイルが存在しない場合（404エラー）
-        res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end("404 Not Found");
+        /*res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("404 Not Found");*/
+
+        filePath = "./404.html"; // 404.htmlのパスを指定
+        fs.readFile(filePath, (err, data) => {
+          if (err) {
+            //404ページが見つからなかった場合
+            // エラーハンドリング
+            res.writeHead(500, { "Content-Type": "text/plain" });
+            res.end("500 Internal Server Error");
+          } else {
+            //404ページが見つかった場合
+            res.writeHead(404, { "Content-Type": "text/html" });
+            res.end(data); // 404.htmlの内容を表示
+          }
+        });
       } else {
         // その他のエラー（500エラー）
         res.writeHead(500, { "Content-Type": "text/plain" });
