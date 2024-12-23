@@ -1,6 +1,6 @@
 @font-face {
   font-family: "SourceCodePro";
-  src: url(font/SourceCodePro.ttf);
+  src: url(font/SourceCodePro.otf);
 }
 html {
   font-family: "SourceCodePro", serif;
