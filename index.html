@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <title>Aji_challe</title>
-    <meta name="description" content="kali"/>
-    <meta name="keywords" content="kali"/>
-    <link rel="stylesheet" href="style.css"/>
+    <meta name="description" content="kali" />
+    <meta name="keywords" content="kali" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main>
@@ -15,62 +15,75 @@
       </div>
       <div class="topic-content">
         <!--USER_BLOCK-->
-          <a href="user_index.html" class="user-card">
-            <div class="card-media">
-                <!-- media container -->
-                <div class="card-media-object-container">
-                  <!--MAIN_PICTURE-->
-                  <div class="card-media-object" style="background-image: url(img/Mokichi.jpg);"></div>
-                  <!--WRITER_PICTURE-->
-                </div>
-                <!-- body container -->
-                <div class="card-media-body">
-                  <div class="card-media-body-top">
-                    <!--DATA-->
-                    <span class="data">写実主義</span>
-                  </div>
-                  <!--TITLE-->
-                  <span class="card-media-body-heading">斎藤茂吉</span>
-                  <div class="card-media-body-supporting-bottom">
-                  <!--WRITER-->
-                    <span class="card-media-body-supporting-bottom-text subtle">私はアララギ派の重鎮でございます。</span>
-                  </div>
-                  <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
-                    <span class="card-media-body-supporting-bottom-text subtle">真面目にいきることでこの世界の本質をうつします</span>
-                  </div>
-                </div>
+        <a href="http://127.0.0.1:3000/user_" id="SaitouMokichi">
+          <div class="card-media">
+            <!-- media container -->
+            <div class="card-media-object-container">
+              <!--MAIN_PICTURE-->
+              <div class="card-media-object" style="background-image: url(img/Mokichi.jpg)"></div>
+              <!--WRITER_PICTURE-->
             </div>
-          </a> 
+            <!-- body container -->
+            <div class="card-media-body">
+              <div class="card-media-body-top">
+                <!--DATA-->
+                <span class="data">写実主義</span>
+              </div>
+              <!--TITLE-->
+              <span class="card-media-body-heading">斎藤茂吉</span>
+              <div class="card-media-body-supporting-bottom">
+                <!--WRITER-->
+                <span class="card-media-body-supporting-bottom-text subtle">私はアララギ派の重鎮でございます。</span>
+              </div>
+              <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
+                <span class="card-media-body-supporting-bottom-text subtle">真面目にいきることでこの世界の本質をうつします</span>
+              </div>
+            </div>
+          </div>
+        </a>
         <!--/USER_BLOCK-->
 
         <!--USER_BLOCK-->
-        <a href="user_index.html" class="user-card">
+        <a href="http://127.0.0.1:3000/user_" id="YosanoAkiko">
           <div class="card-media">
-              <!-- media container -->
-              <div class="card-media-object-container">
-                <!--MAIN_PICTURE-->
-                <div class="card-media-object" style="background-image: url(img/Akiko.jpg);"></div>
-                <!--WRITER_PICTURE-->
+            <!-- media container -->
+            <div class="card-media-object-container">
+              <!--MAIN_PICTURE-->
+              <div class="card-media-object" style="background-image: url(img/Akiko.jpg)"></div>
+              <!--WRITER_PICTURE-->
+            </div>
+            <!-- body container -->
+            <div class="card-media-body">
+              <div class="card-media-body-top">
+                <!--DATA-->
+                <span class="data">明星派</span>
               </div>
-              <!-- body container -->
-              <div class="card-media-body">
-                <div class="card-media-body-top">
-                  <!--DATA-->
-                  <span class="data">明星派</span>
-                </div>
-                <!--TITLE-->
-                <span class="card-media-body-heading">与謝野晶子</span>
-                <div class="card-media-body-supporting-bottom">
+              <!--TITLE-->
+              <span class="card-media-body-heading">与謝野晶子</span>
+              <div class="card-media-body-supporting-bottom">
                 <!--WRITER-->
-                  <span class="card-media-body-supporting-bottom-text subtle">恋愛など理想追及の姿勢を堂々と歌います</span>
-                </div>
-                <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
-                  <span class="card-media-body-supporting-bottom-text subtle">柔肌の熱き血潮に触れもみで寂しからずや道を説く君</span>
-                </div>
+                <span class="card-media-body-supporting-bottom-text subtle">恋愛など理想追及の姿勢を堂々と歌います</span>
               </div>
+              <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
+                <span class="card-media-body-supporting-bottom-text subtle">柔肌の熱き血潮に触れもみで寂しからずや道を説く君</span>
+              </div>
+            </div>
           </div>
-        </a> 
-      <!--/USER_BLOCK-->
+        </a>
+        <!--/USER_BLOCK-->
+        <script>
+          // 全てのリンクにクリックイベントを追加
+          document.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", (event) => {
+              event.preventDefault(); // デフォルトのリンク動作を無効化
+
+              // クリックされたリンク（aタグのみ）のidを取得
+              const clickedId = event.currentTarget.id;
+              console.log(`Clicked text: ${clickedId}`);
+              alert(`Clicked text: ${clickedId}`); // アラートで表示
+            });
+          });
+        </script>
       </div>
     </main>
   </body>

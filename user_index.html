@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8"/>
-  <title>Private</title>
+  <title>Personal</title>
   <meta name="description" content="kali"/>
   <meta name="keywords" content="kali"/>
 <style>
@@ -10,17 +10,54 @@
   font-family: "SourceCodePro";
   src: url(font/SourceCodePro.ttf);
 }
+@media (max-width:400px) {
+  .icon{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.user-name{
+  top: 0;
+  font-size: 48px;
+  margin: 0;
+}
+}
 html {
   font-family: "SourceCodePro", serif;
 }
 body{
    margin: 0;
+   align-items: center;
+}
+.personal-information{
+  padding: 10%;
+}
+.main-information{
+  display: flex;
+}
+.icon{
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.user-name{
+  top: 0;
+  font-size: 86px;
+  margin: 0;
 }
 </style>
 </head>
 <body>
   <main>
-
+    <div class="personal-information">
+      <div class="main-information">
+        <img src="img/Mokichi.jpg" class="icon">
+        <h1 class="user-name">斎藤茂吉</h1>
+      </div>
+      <p class="user-description">dhuhurheuhwufh</p>
+    </div>
   </main>
 </body>
 </html>
