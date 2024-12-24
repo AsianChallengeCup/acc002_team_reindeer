@@ -11,7 +11,7 @@
     <!-- フォームセクション -->
     <div class="container">
       <h2>add favorites</h2>
-      <form id="favorites-form" action="add-fave" method="POST">
+      <form id="favorites-form" action="/add-fave" method="POST">
         <div class="form-group">
           <label for="group">所属</label>
           <input type="text" id="group" name="group" required />
@@ -22,21 +22,11 @@
         </div>
         <div class="form-group">
           <label for="main-description">メインの説明</label>
-          <input
-            type="text"
-            id="main-description"
-            name="main-description"
-            required
-          />
+          <input type="text" id="main-description" name="main-description" required />
         </div>
         <div class="form-group">
           <label for="sub-description">サブの説明</label>
-          <input
-            type="text"
-            id="sub-description"
-            name="sub-description"
-            required
-          />
+          <input type="text" id="sub-description" name="sub-description" required />
         </div>
         <button type="submit">追加</button>
       </form>
@@ -49,12 +39,8 @@
       <div class="user-card" id="user-card">
         <div class="user-group" id="preview-group">所属</div>
         <div class="user-name" id="preview-name">名前</div>
-        <div class="user-main-description" id="preview-main-description">
-          メインの説明
-        </div>
-        <div class="user-sub-description" id="preview-sub-description">
-          サブの説明
-        </div>
+        <div class="user-main-description" id="preview-main-description">メインの説明</div>
+        <div class="user-sub-description" id="preview-sub-description">サブの説明</div>
       </div>
     </div>
 

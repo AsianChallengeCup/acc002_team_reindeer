@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  fetchFaves(5);
+  fetchFaves(1);
 });
 
 function likePost() {
@@ -91,6 +91,7 @@ function fetchFaves(count) {
 
       faves.forEach((fave) => {
         console.log(fave);
+
         var clonedElement = originalElement.cloneNode(true); // 複製
         clonedElement.style.display = "block"; // display設定
 
@@ -117,7 +118,7 @@ function fetchFaves(count) {
           event.preventDefault();
           const clickedId = event.currentTarget.id;
           console.log(`Clicked text: ${clickedId}`);
-          window.location.href = "http://127.0.0.1:3000/faves_" + clickedId;
+          window.location.href = "http://127.0.0.1:3000/faves_" + clickedId + "/latest";
           //alert(`Clicked text: ${clickedId}`);
         });
       });

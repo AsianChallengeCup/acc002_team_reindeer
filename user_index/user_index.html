@@ -1,258 +1,348 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8"/>
-  <title>Personal</title>
-  <meta name="description" content="kali"/>
-  <meta name="keywords" content="kali"/>
-<style>
-@font-face {
-  font-family: "SourceCodePro";
-  src: url(font/SourceCodePro.otf);
-}
-@media (max-width:400px) {
-  .icon{
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-.user-name{
-  top: 0;
-  font-size: 48px;
-  margin: 0;
-}
-.description{
-  font-weight: bold;
-  font-size: small;
-}
-.group{
-  font-size: smaller;
-  font-weight: light;
-}
-.sub-description{
-  font-size: small;
-}
-}
-html {
-  font-family: "SourceCodePro", serif;
-}
-body{
-   margin: 0;
-   align-items: center;
-}
-.personal-information{
-  padding: 10%;
-}
-.main-information{
-  display: flex;
-}
-.icon{
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-.user-name{
-  top: 0;
-  font-size: 86px;
-  margin: 0;
-}
-.description{
-  font-weight: bold;
-}
-.group{
-  font-size: small;
-  font-weight: light;
-}
-.change-button {
-  font-family: "SourceCodePro";
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(45deg, #4caf50, #8bc34a);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-.change-button:hover {
-  background: linear-gradient(45deg, #8bc34a, #4caf50);
-  transform: scale(1.05);
-}
-.change-button:active {
-  transform: scale(0.95);
-}
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-.post-area{
-  margin-top: -5%;
-}
-.post-i{
-  font-size: larger;
-  margin-bottom: 15px;
-  padding-left: 10%;
-  padding-bottom: 20px;
-  width: 90%;
-  border-bottom: 1px  solid rgb(247,247,247);
-}
-.post{
-  width: 90%;
-}
-.post-i:last-child {
-  border-bottom:none;
-}
-header{
-  position: fixed;
-  width: 100%;
-  top: 80%;
-  right: 10%;
-}
-.island{
-  display: flex;
-  justify-content: flex-end;
-  position: relative;
-  width: auto;
-}
-.text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-  transition: opacity 0.5s ease, width 1s ease;
-  padding: 10px;
-  font-size: 16px;
-  font-family: "SourceCodePro", sans-serif;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  background: aliceblue;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.text:focus {
-  border-color:#F96E2A;
-  background: aliceblue;
-  box-shadow: 0 4px 12px rgba(0, 150, 0, 0.2);
-  outline: none;
-}
-.text.open {
-  opacity: 1;
-  width: 60%;
-}
-.FormToButton {
-  width: 70px;
-  height: 70px;
-  align-items: center;
-  background: linear-gradient(45deg, #FF204E, #22177A);
-  border-radius: 50%;
-  border: none;
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  transition: background 0.3s ease, transform 0.5s ease;
-  margin-left: 10px;
-}
-.FormToButton:hover {
-  background: linear-gradient(45deg, #22177A, #FF204E);
-  transform: scale(1.05) rotate(-80deg);
-}
-.button-img {
-  width: 50px;
-  height: 50px;
-}
-.reaction-i{
-  display: flex;
-  margin-left: 20px;
-  align-items: center;
-}
-.reaction-img{
-  width: 30px;
-  height: 30px;
-}
-.reaction-button{
-  all: unset;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.5s ease;
-}
-.reaction-button:hover{
-  transform: scale(1.05) rotate(-5deg);
-}
-</style>
-</head>
-<body>
-  <header>
-    <div class="island">
-      <textarea placeholder="send message!" class="text" id="text"></textarea><br>
-      <button id="FormToButton" onclick="toggleForm();changeButtonImg();" class="FormToButton"><img class="button-img" id="button-img" src="img/pencil.png"></button>
-    </div>
-  </header>
-  <main>
-    <div class="personal-information">
-      <p class="group">写実主義</p>
-      <div class="main-information">
-        <!--
+  <head>
+    <meta charset="UTF-8" />
+    <title>Personal</title>
+    <meta name="description" content="kali" />
+    <meta name="keywords" content="kali" />
+    <style>
+      @font-face {
+        font-family: "SourceCodePro";
+        src: url(/font/SourceCodePro.otf);
+      }
+      @media (max-width: 400px) {
+        .icon {
+          width: 100px;
+          height: 100px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        .user-name {
+          top: 0;
+          font-size: 48px;
+          margin: 0;
+        }
+        .description {
+          font-weight: bold;
+          font-size: small;
+        }
+        .group {
+          font-size: smaller;
+          font-weight: light;
+        }
+        .sub-description {
+          font-size: small;
+        }
+      }
+      html {
+        font-family: "SourceCodePro", serif;
+      }
+      body {
+        margin: 0;
+        align-items: center;
+      }
+      .personal-information {
+        padding: 10%;
+      }
+      .main-information {
+        display: flex;
+      }
+      .icon {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+      .user-name {
+        top: 0;
+        font-size: 86px;
+        margin: 0;
+      }
+      .description {
+        font-weight: bold;
+      }
+      .group {
+        font-size: small;
+        font-weight: light;
+      }
+      .change-button {
+        font-family: "SourceCodePro";
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(45deg, #4caf50, #8bc34a);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+      .change-button:hover {
+        background: linear-gradient(45deg, #8bc34a, #4caf50);
+        transform: scale(1.05);
+      }
+      .change-button:active {
+        transform: scale(0.95);
+      }
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      .post-area {
+        margin-top: -5%;
+      }
+      .post-i {
+        font-size: larger;
+        margin-bottom: 15px;
+        padding-left: 10%;
+        padding-bottom: 20px;
+        width: 90%;
+        border-bottom: 1px solid rgb(247, 247, 247);
+      }
+      .post {
+        width: 90%;
+      }
+      .post-i:last-child {
+        border-bottom: none;
+      }
+      header {
+        position: fixed;
+        width: 100%;
+        top: 80%;
+        right: 10%;
+      }
+      .island {
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        width: auto;
+      }
+      .text {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        transition: opacity 0.5s ease, width 1s ease;
+        padding: 10px;
+        font-size: 16px;
+        font-family: "SourceCodePro", sans-serif;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        background: aliceblue;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .text:focus {
+        border-color: #f96e2a;
+        background: aliceblue;
+        box-shadow: 0 4px 12px rgba(0, 150, 0, 0.2);
+        outline: none;
+      }
+      .text.open {
+        opacity: 1;
+        width: 60%;
+      }
+      .FormToButton {
+        width: 70px;
+        height: 70px;
+        align-items: center;
+        background: linear-gradient(45deg, #ff204e, #22177a);
+        border-radius: 50%;
+        border: none;
+        color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        transition: background 0.3s ease, transform 0.5s ease;
+        margin-left: 10px;
+      }
+      .FormToButton:hover {
+        background: linear-gradient(45deg, #22177a, #ff204e);
+        transform: scale(1.05) rotate(-80deg);
+      }
+      .button-img {
+        width: 50px;
+        height: 50px;
+      }
+      .reaction-i {
+        display: flex;
+        margin-left: 20px;
+        align-items: center;
+      }
+      .reaction-img {
+        width: 30px;
+        height: 30px;
+      }
+      .reaction-button {
+        all: unset;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.5s ease;
+      }
+      .reaction-button:hover {
+        transform: scale(1.05) rotate(-5deg);
+      }
+      .post-date {
+        padding-left: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="island">
+        <textarea placeholder="send message!" class="text" id="text"></textarea><br />
+        <button id="FormToButton" onclick="toggleForm();changeButtonImg();" class="FormToButton"><img class="button-img" id="button-img" src="/user_index/img/pencil.png" /></button>
+      </div>
+    </header>
+    <main>
+      <div class="personal-information">
+        <p class="group">写実主義</p>
+        <div class="main-information">
+          <!--
         <img src="img/Mokichi.jpg" class="icon">
         -->
-        <h1 class="user-name">斎藤茂吉</h1>
-      </div>
-      <p class="description">私はアララギ派の重鎮でございます。</p>
-      <p class="sub-description">真面目にいきることでこの世界の本質をうつします</p>
-      <button class="change-button" onclick="toggleDescription()" id="change-button">latest</button>
-    </div>
-    <div class="post-area">
-      <div class="post-i">
-        <article class="post">斎藤茂吉って、あんまり流行りに敏感じゃないのかも…笑　でもちょっと好きかもね、なんか渋いし。😎</article>
-        <div class="reaction-i">
-          <button id="reaction-button" onclick="goodReaction()" class="reaction-button"><img class="reaction-img" src="img/good.png" id="good-img"></button><p class="number">10</p>
+          <h1 class="user-name">斎藤茂吉</h1>
         </div>
+        <p class="description">私はアララギ派の重鎮でございます。</p>
+        <p class="sub-description">真面目にいきることでこの世界の本質をうつします</p>
+        <button class="change-button" onclick="toggleDescription()" id="change-button">latest</button>
       </div>
-    </div>
-  </main>
-<script>
-function toggleDescription(){
-  var button = document.getElementById('change-button');
-  if(button.textContent === 'latest'){
-    button.textContent = 'good';
-  }
-  else{
-    button.textContent = 'latest';
-  }
-}
-function toggleForm() {
-  var form = document.getElementById('text');
-  var buttonImage = document.getElementById('button-img');
-  form.classList.toggle('open');
-  if (buttonImage.getAttribute('src') == 'img/truck.png') {
-    sendMessage();
-  }
-}
-function changeButtonImg() {
-  var buttonImage = document.getElementById('button-img');
-  var form = document.getElementById('text');
-  if (form.value.trim() != '') {
-    buttonImage.setAttribute('src', 'img/truck.png');
-  } else {
-    buttonImage.setAttribute('src', 'img/pencil.png');
-  }
-}
-document.getElementById('text').addEventListener('input', changeButtonImg);
-/*ここですよ、ちなみにわたしはこのページに一番愛を込めました*/
-// テキストエリアの内容を送信する関数
-function sendMessage(){
-  var form = document.getElementById('text');
-  alert(form.value + "を送信しましたw");
-  form.value = ''; // 入力をリセット
-}
-function goodReaction(){
-  goodImage = document.getElementById('good-img');
-  if(goodImage.getAttribute('src')==='img/good.png'){
-    goodImage.setAttribute('src', 'img/yellow-good.png');
-  }else{
-    goodImage.setAttribute('src', 'img/good.png');
-  }
-}
-</script>
-</body>
+
+      <div class="post-area">
+        <div id="newContainer"></div>
+      </div>
+
+      <template id="original">
+        <div class="post-i">
+          <article class="post">コンテンツ</article>
+          <div class="post-details">
+            <div class="reaction-i">
+              <button class="reaction-button"><img class="reaction-img" src="/user_index/img/good.png" /></button>
+              <p class="post-number">0</p>
+              <div class="post-date">
+                <p class="post-date-text">日付</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div id="newPostContainer"></div>
+    </main>
+    <script>
+      let isTruck = false;
+
+      function toggleDescription() {
+        var button = document.getElementById("change-button");
+        const baseUrl = window.location.href.replace(/\/[^/]*$/, ""); // 現在のURLを取得して、最後の "/" 以降を削除
+        //alert(`ボタンが押される前（素）のURLは${baseUrl}です`);
+
+        if (button.textContent === "latest") {
+          window.location.href = baseUrl + "/latest";
+          button.textContent = "good";
+        } else {
+          window.location.href = baseUrl + "/good";
+          button.textContent = "latest";
+        }
+      }
+      function toggleForm() {
+        var form = document.getElementById("text");
+        var buttonImage = document.getElementById("button-img");
+        form.classList.toggle("open");
+        if (buttonImage.getAttribute("src") == "/user_index/img/truck.png") {
+          sendMessage();
+        }
+      }
+
+      function changeButtonImg() {
+        var buttonImage = document.getElementById("button-img");
+        var form = document.getElementById("text");
+        if (form.value.trim() !== "") {
+          if (!isTruck) {
+            // トラック画像がまだ設定されていない場合のみ変更
+            buttonImage.setAttribute("src", "/user_index/img/truck.png");
+            isTruck = true;
+          }
+        } else {
+          if (isTruck) {
+            // 鉛筆画像がまだ設定されていない場合のみ変更
+            buttonImage.setAttribute("src", "/user_index/img/pencil.png");
+            isTruck = false;
+          }
+        }
+      }
+
+      document.getElementById("text").addEventListener("input", changeButtonImg);
+      /*ここですよ、ちなみにわたしはこのページに一番愛を込めました*/
+      // テキストエリアの内容を送信する関数
+      function sendMessage() {
+        const form = document.getElementById("text");
+        const message = form.value.trim();
+
+        // 現在のページのパス部分（ホスト名以下）を取得
+        const pathName = window.location.pathname;
+        // 正規表現でfaves_の後の数字を抜き出す
+        const idMatch = pathName.match(/^\/faves_(\d+)\/?.*$/);
+        const id = idMatch ? idMatch[1] : null;
+
+        if (message === "") {
+          alert("メッセージを入力してください。");
+          return;
+        }
+
+        fetch("http://127.0.0.1:3000/add-post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: message, fave_id: id }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`server error ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(1);
+            addNewPostToDOM(data);
+            form.value = "";
+            console.log(2);
+            changeButtonImg();
+          })
+          .then(() => {
+            window.location.href = window.location.href;
+          })
+          .catch((error) => {
+            console.error("Error: ", error);
+            alert("メッセージの送信に失敗しました。後ほど再試行してください。");
+          });
+      }
+      // 新しい投稿をDOMに追加する関数
+      function addNewPostToDOM(post) {
+        console.log(post);
+
+        const originalElement = document.getElementById("original");
+        const clonedElement = originalElement.content.cloneNode(true); // テンプレートの複製
+
+        const clonedText = clonedElement.querySelector(".post");
+        const clonedLikes = clonedElement.querySelector(".post-number");
+        const clonedCreatedAt = clonedElement.querySelector(".post-date-text");
+        const reactionButton = clonedElement.querySelector(".reaction-button");
+        const reactionImg = clonedElement.querySelector(".reaction-img");
+
+        clonedText.textContent = post.text; // テキスト内容
+        clonedLikes.textContent = post.good; // いいね数
+        clonedCreatedAt.textContent = new Date(post.created_at).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+
+        reactionButton.dataset.postId = post.post_id;
+
+        // 新しい投稿を先頭に追加
+        document.getElementById("newPostContainer").prepend(clonedElement);
+
+        reactionButton.addEventListener("click", function () {
+          toggleGood(this, clonedLikes, reactionImg, post.post_id);
+        });
+
+        console.log(clonedElement);
+      }
+    </script>
+    <script src="/user_index/user_index.js"></script>
+  </body>
 </html>
