@@ -1,50 +1,117 @@
 document.addEventListener("DOMContentLoaded", function () {
-  duplicateElements(5); // 例えば5回複製
+  fetchFaves(5);
 });
 
 function likePost() {
   alert("仮");
 }
 
-function duplicateElements(count) {
-  var originalElement = document.getElementById("original");
-  originalElement.style.display = "none"; //コピー元を非表示
+function fetchFaves(count) {
+  let faves = null;
 
-  var names = ["斎藤茂吉", "与謝野晶子", "高浜虚子", "石川啄木", "正岡子規"];
-  var namesID = ["SaitouMokichi", "YosanoAkiko", "TakahamaKyosi", "IshikawaTakuboku", "MasaokaShiki"];
-  var descriptions = ["写実主義", "明星派", "俳句の革新者", "青春の悩み", "文学の進歩"];
-  var additionalTexts = ["私はアララギ派の重鎮でございます。", "恋愛など理想追及の姿勢を堂々と歌います。", "俳句に革命をもたらす作品を。", "若き日の情熱と悩みが詠み込まれています。", "日本文学に革新を求め続けた生涯。"];
-  var famousPoems = ["あらざらむ　この世のほかの　思ひ出に　今ひとたびの　逢ひ見むためも", "君死にたまふことなかれ　わがために　心をかけて　いざ生きよ", "春風に　花の色もゆる　夜のこと　日も暮れかけぬ　あたりをさまよふ", "ああ、青春の日々よ　やすらかに　悩みの中にも　喜びを感じて", "柿の木の　大木に座して　泣くやうに　涙をひとしずく　落としにけり"];
+  //サーバーとの通信の処理
+  fetch("http://127.0.0.1:3000/3000/faves") // サーバーからユーザー情報を取得
+    .then((response) => {
+      if (!response.ok) {
+        // ステータスコードが200番台でない場合（200番は正常なレスポンスのとき）
+        // 代わりのデータを設定
+        const fallbackData = {
+          faves: [
+            {
+              fave_id: 1,
+              details: {
+                group: "写実主義",
+                name: "斎藤茂吉",
+                description: "私はアララギ派の重鎮でございます。",
+                sub_description: "真面目に生きることで、文学の進歩を目指しています。",
+              },
+            },
+            {
+              fave_id: 2,
+              details: {
+                group: "写実主義",
+                name: "test",
+                description: "私はアララギ派の重鎮でございます。",
+                sub_description: "真面目に生きることで、文学の進歩を目指しています。",
+              },
+            },
+            {
+              fave_id: 3,
+              details: {
+                group: "青春派",
+                name: "与謝野晶子",
+                description: "恋愛など理想追及の姿勢を堂々と歌います。",
+                sub_description: "女性の独立と自由な生き方をテーマにした作品を書いています。",
+              },
+            },
+          ],
+        };
+        return fallbackData; // fallbackDataを返すことで次のthenで使えるようにする
+      }
+      return response.json(); //正常なデータはそのまま返す
+    })
+    .then((data) => {
+      faves = data.faves; // 取得したユーザー情報
 
-  for (var i = 0; i < count; i++) {
-    var clonedElement = originalElement.cloneNode(true); // 複製
-    clonedElement.id = namesID[i]; // id変更
-    clonedElement.style.display = "block"; // display設定
+      //favesContainer = document.getElementById("faves-container"); // ユーザー情報を表示する要素
 
-    var clonedName = clonedElement.querySelector(".card-media-body-heading");
-    var clonedDescription = clonedElement.querySelector(".data");
-    var clonedText = clonedElement.querySelector(".card-media-body-supporting-bottom-text");
-    var clonedHoverText = clonedElement.querySelector(".card-media-body-supporting-bottom.card-media-body-supporting-bottom-reveal .card-media-body-supporting-bottom-text.subtle");
+      //取得された推しの数だけ繰り返す
+      faves.forEach((fave) => {
+        const faveId = fave.fave_id; // ユーザーの fave_id
+        const group = fave.details.group; // 所属名
+        const name = fave.details.name; // 名前
+        const description = fave.details.description; // 説明1
+        const subDescription = fave.details.sub_description; // 説明2
 
-    clonedName.textContent = names[i];
-    clonedDescription.textContent = descriptions[i];
-    clonedText.textContent = additionalTexts[i];
-    clonedHoverText.textContent = famousPoems[i]; //ホバーテキストの変更
+        // ユーザー情報を表示する処理
+        console.log(`ID: ${faveId}`);
+        console.log(`Group: ${group}`);
+        console.log(`Name: ${name}`);
+        console.log(`Description: ${description}`);
+        console.log(`Sub Description: ${subDescription}`);
+      });
+    })
+    .then(() => {
+      //コピーするときの処理
+      var originalElement = document.getElementById("original");
+      originalElement.style.display = "none"; //コピー元を非表示
 
-    document.getElementById("newContainer").appendChild(clonedElement); // 新しい要素を追加
+      console.log(faves);
 
-    // debug: 複製された要素が正しく追加されているかを確認
-    console.log(clonedElement);
-  }
+      faves.forEach((fave) => {
+        console.log(fave);
+        var clonedElement = originalElement.cloneNode(true); // 複製
+        clonedElement.style.display = "block"; // display設定
 
-  // クリックイベント
-  document.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-      const clickedId = event.currentTarget.id;
-      console.log(`Clicked text: ${clickedId}`);
-      window.location.href = "http://127.0.0.1:3000/user_" + clickedId;
-      //alert(`Clicked text: ${clickedId}`);
+        var clonedName = clonedElement.querySelector(".card-media-body-heading");
+        var clonedGroup = clonedElement.querySelector(".data");
+        var clonedText = clonedElement.querySelector(".card-media-body-supporting-bottom-text");
+        var clonedHoverText = clonedElement.querySelector(".card-media-body-supporting-bottom.card-media-body-supporting-bottom-reveal .card-media-body-supporting-bottom-text.subtle");
+
+        clonedElement.id = fave.fave_id; // id変更
+        clonedName.textContent = fave.details.name; // 名前
+        clonedGroup.textContent = fave.details.group; // 所属名
+        clonedText.textContent = fave.details.description; // 説明1
+        clonedHoverText.textContent = fave.details.sub_description; // 説明2（ホバー時のテキスト）
+
+        document.getElementById("newContainer").appendChild(clonedElement); // 新しい要素を追加
+
+        // debug: 複製された要素が正しく追加されているかを確認
+        console.log(clonedElement);
+      });
+
+      // クリックイベント
+      document.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const clickedId = event.currentTarget.id;
+          console.log(`Clicked text: ${clickedId}`);
+          window.location.href = "http://127.0.0.1:3000/faves_" + clickedId;
+          //alert(`Clicked text: ${clickedId}`);
+        });
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching faves:", error);
     });
-  });
 }
