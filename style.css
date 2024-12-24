@@ -5,6 +5,32 @@
 html {
   font-family: "SourceCodePro", serif;
 }
+header{
+  position: fixed;
+  z-index: 9999;
+}
+.AddToButton{
+  position: fixed;
+  top: 80%;
+  right: 10%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(45deg, #FF4C4C,#EC8305);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: background 0.3s ease, transform 0.5s ease;
+  border-radius: 50%;
+}
+.AddToButton:hover{
+  background: linear-gradient(45deg, #FF4C4C, #EC8305);
+  transform: scale(1.05) rotate(-10deg);
+}
+.add-img{
+  width: 50px;
+  height: 50px;
+}
 .search-bar {
   align-items: center;
   display: flex;
