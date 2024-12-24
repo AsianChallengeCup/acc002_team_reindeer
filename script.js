@@ -10,8 +10,13 @@ function fetchFaves(count) {
   let faves = null;
 
   //サーバーとの通信の処理
-  fetch("http://127.0.0.1:3000/3000/faves") // サーバーからユーザー情報を取得
+  fetch("http://127.0.0.1:3000/faves", {
+    headers: {
+      Accept: "application/json", // JSONリクエストであることを示す
+    },
+  })
     .then((response) => {
+      console.log("なにかのデータが帰ってきたよ");
       if (!response.ok) {
         // ステータスコードが200番台でない場合（200番は正常なレスポンスのとき）
         // 代わりのデータを設定
@@ -48,10 +53,16 @@ function fetchFaves(count) {
         };
         return fallbackData; // fallbackDataを返すことで次のthenで使えるようにする
       }
+      console.log("1"); //ログ
+      console.log(response);
+      console.log(response.json);
       return response.json(); //正常なデータはそのまま返す
     })
     .then((data) => {
-      faves = data.faves; // 取得したユーザー情報
+      console.log("2"); //ログ
+      console.log(data);
+      faves = JSON.parse(data).faves; // 取得したユーザー情報
+      console.log("3"); //ログ
 
       //favesContainer = document.getElementById("faves-container"); // ユーザー情報を表示する要素
 
