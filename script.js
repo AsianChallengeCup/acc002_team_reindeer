@@ -1,4 +1,42 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // 入力フィールドを取得
+  const searchBox = document.querySelector('.search-box');
+  console.log(searchBox);
+
+  // イベントリスナーを追加
+  searchBox.addEventListener('keydown', function(event) {
+    // エンターキーが押された場合
+    if (event.key === 'Enter') {
+      // 入力された値を取得
+      const searchValue = searchBox.value;
+      const query = `http://127.0.0.1:3000/faves_search?search=${encodeURIComponent(searchValue)}`; //クエリを生成する
+      
+      fetch(query, {
+        //GETリクエストを送信する、（getの場合は明示的に書かなくて良い。postは必要）
+        headers: {
+          Accept: "application/json", // JSONリクエストであることを示す
+        },
+      })
+        .then((response) => {
+          //なにかデータが帰ってきたとき
+          if (!response.ok) {
+          } else {
+            //正常にデータが帰ってきたとき
+            return response.json();
+          }
+        })
+        .then((data) => {
+          clearPreviousResults(); // 前の結果を削除
+          cloneFromJson(data);node 
+          
+        })
+        .catch((error) => {
+          //エラーハンドリング
+          console.error("Error:", error);
+        });
+    }
+  });
+
   fetchFaves(1);
 });
 
@@ -57,10 +95,15 @@ function fetchFaves(count) {
       console.log(response);
       console.log(response.json);
       return response.json(); //正常なデータはそのまま返す
+    }).then((data) => {
+      cloneFromJson(data);
     })
-    .then((data) => {
-      console.log("2"); //ログ
-      console.log(data);
+    
+}
+
+function cloneFromJson(data){
+  try{
+    console.log(data);
       faves = JSON.parse(data).faves; // 取得したユーザー情報
       console.log("3"); //ログ
 
@@ -81,8 +124,7 @@ function fetchFaves(count) {
         console.log(`Description: ${description}`);
         console.log(`Sub Description: ${subDescription}`);
       });
-    })
-    .then(() => {
+
       //コピーするときの処理
       var originalElement = document.getElementById("original");
       originalElement.style.display = "none"; //コピー元を非表示
@@ -122,8 +164,15 @@ function fetchFaves(count) {
           //alert(`Clicked text: ${clickedId}`);
         });
       });
-    })
-    .catch((error) => {
-      console.error("Error fetching faves:", error);
-    });
+  }catch(error){
+    console.error("Error fetching faves:", error);
+  }
+}
+
+function clearPreviousResults() {
+  // 新しい検索結果が表示される前に、既存の要素をクリアする
+  const container = document.getElementById("newContainer");
+  while (container.firstChild) {
+    container.removeChild(container.firstChild); // すべての子要素を削除
+  }
 }

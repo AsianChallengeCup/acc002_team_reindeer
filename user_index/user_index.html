@@ -90,14 +90,18 @@
       }
       .post-area {
         margin-top: -5%;
+        background-color: rgb(196, 238, 189);
       }
       .post-i {
+        margin-bottom: 1px;
+        padding-top: 20px;
         font-size: larger;
-        margin-bottom: 15px;
         padding-left: 10%;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
         width: 90%;
         border-bottom: 1px solid rgb(247, 247, 247);
+        background-color: aliceblue;
+        border: 1px solid rgb(247, 247, 247);
       }
       .post {
         width: 90%;
@@ -182,6 +186,20 @@
       .post-date {
         padding-left: 100px;
       }
+
+
+      a{
+  cursor: inherit;
+}
+
+  .cursor-circle {
+    position: fixed;    /* 画面上で固定する */
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none; /* この要素でクリックを邪魔しないように */
+    transform: translate(-50%, -50%); /* 丸の中心をカーソルの位置に合わせるため */
+  }
     </style>
   </head>
   <body>
@@ -224,7 +242,10 @@
         </div>
       </template>
       <div id="newPostContainer"></div>
+      
+      <div class="cursor-circle" id="cursorCircle"></div>
     </main>
+    <script src="/cursor.js"></script>
     <script>
       let isTruck = false;
 

@@ -39,14 +39,14 @@ const dbAll = (sql, params = []) => {
   });
 };
 
-async function getSearchFavoriteJson(serachWord) {
+async function getSearchFavoriteJson(searchWord) {
   const favoritesJson = {
     faves: [],
   };
 
   try {
     // クエリの実行
-    const rows = await dbAll(`SELECT * FROM Favorites WHERE name LIKE '%${serachWord}%'`);
+    const rows = await dbAll(`SELECT * FROM Favorites WHERE name LIKE '%${searchWord}%'`);
 
     // rows をマッピングして details をネスト
     favoritesJson.faves = rows.map((row) => ({
@@ -163,11 +163,13 @@ async function getPostsJson(fave_id, orderType) {
 const hostname = "127.0.0.1";
 const port = 3000;
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async(req, res) => {
   let filePath = "." + req.url; // リクエストされたURLを基にファイルパスを作成
   console.log("\n" + filePath);
   const parsedUrl = url.parse(req.url, true); // URLをパース
   const pathname = parsedUrl.pathname; // pathnameを取得
+
+  //console.log(`リクエストされたURL2${pathname}`);
 
   if (filePath === "./faves") {
     filePath = "./index.html";
@@ -417,6 +419,30 @@ const server = http.createServer((req, res) => {
     });
     return;
   }
+  else if(req.method === "GET" && pathname === "/faves_search"){ 
+    
+    //推しの検索画面のとき
+    try {
+      console.log("推しの検索が実行されました");
+      const parsedUrl = url.parse(req.url, true); // URLをパースしてクエリパラメータを取得 trueでクエリ解析が有効になる
+      const searchWord = parsedUrl.query.search; //クエリを収納
+
+      const result = await getSearchFavoriteJson(searchWord);
+      console.log(result);
+
+      console.log(`クエリから取得された推しの検索ワードは${searchWord}です`);
+
+      // レスポンスを返す
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(result));
+    } catch (err) {
+      // エラーハンドリング
+      console.error("Failed to parse JSON:", err.message);
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("Invalid JSON");
+    }
+  return;
+  }
 
   // クライアントがJSONをリクエストしているかを判定
   //一般的なアクセスではacceptヘッダーにtext/htmlが含まれるが、JavaScriptのfetchリクエストではacceptヘッダーにapplication/jsonを指定することで、JSONを返すようにできます。
@@ -431,7 +457,7 @@ const server = http.createServer((req, res) => {
         .then((json) => {
           //正常に送信できた場合
           res.writeHead(200, { "Content-Type": "application/json" });
-          console.log(JSON.stringify(json));
+          //console.log(JSON.stringify(json));
           res.end(JSON.stringify(json));
         })
         .catch((err) => {
