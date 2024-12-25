@@ -42,9 +42,24 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    fetch("http://127.0.0.1:3000/add-fave", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        group_name: groupInput.value.trim(),
+        name: nameInput.value.trim(),
+        description: mainDescriptionInput.value.trim(),
+        sub_description: subDescriptionInput.value.trim(),
+      })
+    });
+
     // 成功メッセージの表示
     messageDiv.style.color = "green";
     messageDiv.textContent = "Favoritesが正常に追加されました。";
+
+    window.location.href = '/index.html';
 
     // フォームのリセット
     form.reset();

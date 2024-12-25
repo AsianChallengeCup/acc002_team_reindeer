@@ -113,7 +113,7 @@ function fetchFaves(count) {
       });
 
       // クリックイベント
-      document.querySelectorAll("a").forEach((link) => {
+      document.querySelectorAll("a.user-link").forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
           const clickedId = event.currentTarget.id;

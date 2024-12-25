@@ -38,6 +38,35 @@ const dbAll = (sql, params = []) => {
     });
   });
 };
+
+async function getSearchFavoriteJson(serachWord) {
+  const favoritesJson = {
+    faves: [],
+  };
+
+  try {
+    // クエリの実行
+    const rows = await dbAll(`SELECT * FROM Favorites WHERE name LIKE '%${serachWord}%'`);
+
+    // rows をマッピングして details をネスト
+    favoritesJson.faves = rows.map((row) => ({
+      fave_id: row.fave_id,
+      details: {
+        group: row.group_name,
+        name: row.name,
+        description: row.description,
+        sub_description: row["sub-description"] || row.sub_description, // カラム名に注意
+      },
+    }));
+
+    // JSON を返す
+    return JSON.stringify(favoritesJson, null, 2);
+  } catch (err) {
+    console.error("エラー:", err.message);
+    throw err; // エラーを再スロー
+  }
+}
+
 // favoritesJson 関数を修正
 async function getFavoritesJson() {
   const favoritesJson = {
@@ -321,6 +350,70 @@ const server = http.createServer((req, res) => {
       });
 
       stmt.finalize();
+    });
+    return;
+  }
+  else if(req.method === "POST" && pathname === "/add-fave"){
+    let body = "";
+
+    req.on("data", (chunk) => {
+      body += chunk;
+      if(body.length > 1e6){
+        req.connection.destroy();
+      }
+    });
+
+    req.on("end", () => {
+      let parsedBody = querystring.parse(body);
+      try{
+        parsedBody = JSON.parse(body);
+      }catch(err){
+        return;
+      }
+
+      const group_name = parsedBody.group_name;``
+      const name = parsedBody.name;
+      const description = parsedBody.description;
+      const sub_description = parsedBody.sub_description;
+      const stmt = db.prepare(`INSERT INTO Favorites (group_name, name, description, sub_description) VALUES (?, ?, ?, ?)`);
+      stmt.run(group_name, name, description, sub_description);
+    });
+  }else if(req.method === "POST" && pathname === "/changeLike"){//いいね数が変更されたとき
+    let body = "";
+
+    // データをチャンクとして受け取る
+    req.on("data", (chunk) => {
+      body += chunk.toString(); // チャンクを文字列として追加
+    });
+
+    // データ受信完了時
+    req.on("end", () => {
+      try {
+        // JSON を解析
+        const parsedData = JSON.parse(body);
+        const { POSTID, AMOUNTLIKES } = parsedData;
+
+        // コンソールにデータを出力
+        console.log(`POSTID: ${POSTID}`);
+        console.log(`AMOUNTLIKES: ${AMOUNTLIKES}`);
+
+        const stmt = db.prepare(`UPDATE Post SET good = ? WHERE id = ?`)
+        stmt.run(AMOUNTLIKES, POSTID);
+
+        // レスポンスを返す
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            message: "Data received successfully",
+            receivedData: { POSTID, AMOUNTLIKES },
+          })
+        );
+      } catch (err) {
+        // エラーハンドリング
+        console.error("Failed to parse JSON:", err.message);
+        res.writeHead(400, { "Content-Type": "text/plain" });
+        res.end("Invalid JSON");
+      }
     });
     return;
   }

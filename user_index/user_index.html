@@ -329,7 +329,9 @@
 
         clonedText.textContent = post.text; // テキスト内容
         clonedLikes.textContent = post.good; // いいね数
-        clonedCreatedAt.textContent = new Date(post.created_at).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
+        const created_at = new Date(post.created_at);
+        created_at.setHours(created_at.getHours() + 9);
+        clonedCreatedAt.textContent = created_at.toLocaleString("ja-JP", { timeZone: "UTC" });
 
         reactionButton.dataset.postId = post.post_id;
 
