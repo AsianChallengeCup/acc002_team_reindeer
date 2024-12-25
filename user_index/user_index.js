@@ -3,7 +3,7 @@ url取得して、サーバーにfetchで送る（クエリを使う）・・北
 jsonを受け取る
 jsonから生成する
 */
-let amountLikes = 0; //適当に0で初期化しておく
+let amountLikes = 0; //適当に0で初期化しておく　ここの変数にはJsonのすべてのものが入るのではなく、postsのもののみが入る
 let postsJson = null;
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -85,6 +85,7 @@ function receiveJsonPost(receivedJson) {
 
     console.log(post);
     var clonedElement = originalElement.content.cloneNode(true); // 複製
+    
     //clonedElement.style.display = "block"; // display設定
 
     var clonedText = clonedElement.querySelector(".post");
@@ -95,8 +96,16 @@ function receiveJsonPost(receivedJson) {
 
     clonedText.textContent = post.details.text; // テキスト内容
     clonedLikes.textContent = post.details.likes; // いいね数
-    amountLikes = post.details.likes; //いいね数を他のところでも使えるように保存しておく
-    clonedCreatedAt.textContent = post.details.created_at; //投稿時間
+    amountLikes = post.details.likes; //いいね数を他のところでも使えるように保存しておく    
+    
+    // created_at を Date オブジェクトに変換
+    let date = new Date(post.details.created_at);
+    console.log(date.setHours(date.getHours() +9));
+    // 日本標準時（JST）でフォーマット
+    clonedCreatedAt.textContent = date.toLocaleString({ timeZone: "Asia/Tokyo" });
+
+    clonedElement.id = post.post_id; // クローンされた要素自体のIDを変更
+    reactionButton.dataset.postId = post.post_id; // ボタンのIDを変更
 
     clonedElement.id = post.post_id; //クローンされた物自体のIDを変更
     reactionButton.dataset.postId = post.post_id; //ボタンのIDを変更
@@ -158,13 +167,22 @@ function toggleGood(button, likeElement, imgElement, postId) {
   const isLiked = imgElement.getAttribute("src") === "/user_index/img/yellow-good.png"; //画像が同じかどうかでbool値を与える
   if (isLiked) {
     imgElement.setAttribute("src", "/user_index/img/good.png");
-    amountLikes--;
+    amountLikes = getLikesByPostId(postId);
   } else {
     imgElement.setAttribute("src", "/user_index/img/yellow-good.png");
-    amountLikes++;
+    amountLikes = getLikesByPostId(postId) + 1;
   }
   console.log(amountLikes);
-  likeElement.textContent;
+  likeElement.textContent = amountLikes;
+
+fetch("http://127.0.0.1:3000/changeLike", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ POSTID: postId, AMOUNTLIKES: amountLikes }),
+  });
+  console.log(JSON.stringify({ POSTID: postId, AMOUNTLIKES: amountLikes }) + "実際にサーバーに送信したstringだよ");
 
   /*fetch("http://127.0.0.1:3000/changeLike", {
     method: "POST",
@@ -201,7 +219,7 @@ function toggleGood(button, likeElement, imgElement, postId) {
 
 // 特定のpost_idを取得する関数
 function getLikesByPostId(postId) {
-  const post = postsJson.posts.find((post) => post.post_id === postId); // post_idで検索
+  const post = postsJson.find(post => post.post_id == postId); // post_idで検索
   if (post) {
     return post.details.likes; // 見つかったらlikesを返す
   } else {
