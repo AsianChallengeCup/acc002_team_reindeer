@@ -39,14 +39,14 @@ const dbAll = (sql, params = []) => {
   });
 };
 
-async function getSearchFavoriteJson(serachWord) {
+async function getSearchFavoriteJson(searchWord) {
   const favoritesJson = {
     faves: [],
   };
 
   try {
     // クエリの実行
-    const rows = await dbAll(`SELECT * FROM Favorites WHERE name LIKE '%${serachWord}%'`);
+    const rows = await dbAll(`SELECT * FROM Favorites WHERE name LIKE '%${searchWord}%'`);
 
     // rows をマッピングして details をネスト
     favoritesJson.faves = rows.map((row) => ({
@@ -163,11 +163,13 @@ async function getPostsJson(fave_id, orderType) {
 const hostname = "127.0.0.1";
 const port = 3000;
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   let filePath = "." + req.url; // リクエストされたURLを基にファイルパスを作成
   console.log("\n" + filePath);
   const parsedUrl = url.parse(req.url, true); // URLをパース
   const pathname = parsedUrl.pathname; // pathnameを取得
+
+  //console.log(`リクエストされたURL2${pathname}`);
 
   if (filePath === "./faves") {
     filePath = "./index.html";
@@ -198,7 +200,6 @@ const server = http.createServer((req, res) => {
     req.on("end", () => {
       let parsedBody = querystring.parse(body);
       try {
-        // クライアントがJSON形式で送信していると仮定
         parsedBody = JSON.parse(body);
       } catch (err) {
         console.error("JSONパースエラー:", err.message);
@@ -352,33 +353,34 @@ const server = http.createServer((req, res) => {
       stmt.finalize();
     });
     return;
-  }
-  else if(req.method === "POST" && pathname === "/add-fave"){
+  } else if (req.method === "POST" && pathname === "/add-fave") {
     let body = "";
 
     req.on("data", (chunk) => {
       body += chunk;
-      if(body.length > 1e6){
+      if (body.length > 1e6) {
         req.connection.destroy();
       }
     });
 
     req.on("end", () => {
       let parsedBody = querystring.parse(body);
-      try{
+      try {
         parsedBody = JSON.parse(body);
-      }catch(err){
+      } catch (err) {
         return;
       }
 
-      const group_name = parsedBody.group_name;``
+      const group_name = parsedBody.group_name;
+      ``;
       const name = parsedBody.name;
       const description = parsedBody.description;
       const sub_description = parsedBody.sub_description;
       const stmt = db.prepare(`INSERT INTO Favorites (group_name, name, description, sub_description) VALUES (?, ?, ?, ?)`);
       stmt.run(group_name, name, description, sub_description);
     });
-  }else if(req.method === "POST" && pathname === "/changeLike"){//いいね数が変更されたとき
+  } else if (req.method === "POST" && pathname === "/changeLike") {
+    //いいね数が変更されたとき
     let body = "";
 
     // データをチャンクとして受け取る
@@ -397,7 +399,7 @@ const server = http.createServer((req, res) => {
         console.log(`POSTID: ${POSTID}`);
         console.log(`AMOUNTLIKES: ${AMOUNTLIKES}`);
 
-        const stmt = db.prepare(`UPDATE Post SET good = ? WHERE id = ?`)
+        const stmt = db.prepare(`UPDATE Post SET good = ? WHERE id = ?`);
         stmt.run(AMOUNTLIKES, POSTID);
 
         // レスポンスを返す
@@ -410,11 +412,33 @@ const server = http.createServer((req, res) => {
         );
       } catch (err) {
         // エラーハンドリング
-        console.error("Failed to parse JSON:", err.message);
+        console.error(err.message);
         res.writeHead(400, { "Content-Type": "text/plain" });
         res.end("Invalid JSON");
       }
     });
+    return;
+  } else if (req.method === "GET" && pathname === "/faves_search") {
+    //推しの検索画面のとき
+    try {
+      console.log("推しの検索が実行されました");
+      const parsedUrl = url.parse(req.url, true); // URLをパースしてクエリパラメータを取得 trueでクエリ解析が有効になる
+      const searchWord = parsedUrl.query.search; //クエリを収納
+
+      const result = await getSearchFavoriteJson(searchWord);
+      console.log(result);
+
+      //console.log(`クエリから取得された推しの検索ワードは${searchWord}です`);
+
+      // レスポンスを返す
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(result));
+    } catch (err) {
+      // エラーハンドリング
+      console.error(err.message);
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("Invalid JSON");
+    }
     return;
   }
 
@@ -431,7 +455,7 @@ const server = http.createServer((req, res) => {
         .then((json) => {
           //正常に送信できた場合
           res.writeHead(200, { "Content-Type": "application/json" });
-          console.log(JSON.stringify(json));
+          //console.log(JSON.stringify(json));
           res.end(JSON.stringify(json));
         })
         .catch((err) => {
@@ -444,8 +468,10 @@ const server = http.createServer((req, res) => {
       console.log(filePath + "_投稿一覧のJsonがリクエストされました");
       //投稿一覧のページのとき
       const parsedUrl = url.parse(req.url, true); // URLをパースしてクエリパラメータを取得 trueでクエリ解析が有効になる
-      const faveId = parsedUrl.query.id.split(",")[1]; // 配列として分割して2番目の値を取得
-      const orderType = parsedUrl.query.orderType; // 配列として分割して2番目の値を取得
+      const faveId = parsedUrl.query.id;
+      console.log("リクエストされたユーザーのIDは" + parsedUrl.query.id);
+
+      const orderType = parsedUrl.query.orderType;
       console.log(`クエリから取得された推しのIDは${faveId}です`);
       console.log(`クエリから取得されたソートの方法は${orderType}です`);
 
@@ -464,13 +490,14 @@ const server = http.createServer((req, res) => {
         });
     }
   } else {
-    //HTMLリクエストの場合
-    console.log(filePath + "HTMLがリクエストされました");
+    //JSON以外のリクエストの場合
+    console.log(filePath + "JSON以外のものがリクエストされました");
     // ファイルを読み込んでレスポンスを送信
     fs.readFile(filePath, (error, content) => {
       if (error) {
         if (error.code === "ENOENT") {
-          if (filePath.substring(0, 8) === "./faves_") {
+          if (filePath.split("/")[3] === undefined) {
+            //latestのあとに無駄なものがついていないとき
             //各ユーザーのurlが押されたとき
             console.log("各ユーザごとのページへとリダイレクトさせます");
             filePath = "./user_index/user_index.html"; //各ユーザーごとのページのhtmlのパスを指定

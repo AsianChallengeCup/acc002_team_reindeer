@@ -90,14 +90,18 @@
       }
       .post-area {
         margin-top: -5%;
+        background-color: rgb(196, 238, 189);
       }
       .post-i {
+        margin-bottom: 1px;
+        padding-top: 20px;
         font-size: larger;
-        margin-bottom: 15px;
         padding-left: 10%;
-        padding-bottom: 20px;
+        padding-bottom: 10px;
         width: 90%;
         border-bottom: 1px solid rgb(247, 247, 247);
+        background-color: aliceblue;
+        border: 1px solid rgb(247, 247, 247);
       }
       .post {
         width: 90%;
@@ -182,6 +186,19 @@
       .post-date {
         padding-left: 100px;
       }
+
+      a {
+        cursor: inherit;
+      }
+
+      .cursor-circle {
+        position: fixed; /* 画面上で固定する */
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        pointer-events: none; /* この要素でクリックを邪魔しないように */
+        transform: translate(-50%, -50%); /* 丸の中心をカーソルの位置に合わせるため */
+      }
     </style>
   </head>
   <body>
@@ -203,6 +220,7 @@
         <p class="description">私はアララギ派の重鎮でございます。</p>
         <p class="sub-description">真面目にいきることでこの世界の本質をうつします</p>
         <button class="change-button" onclick="toggleDescription()" id="change-button">latest</button>
+        <p>投稿の並び順を変更する</p>
       </div>
 
       <div class="post-area">
@@ -224,7 +242,10 @@
         </div>
       </template>
       <div id="newPostContainer"></div>
+
+      <div class="cursor-circle" id="cursorCircle"></div>
     </main>
+    <script src="/cursor.js"></script>
     <script>
       let isTruck = false;
 
@@ -233,12 +254,10 @@
         const baseUrl = window.location.href.replace(/\/[^/]*$/, ""); // 現在のURLを取得して、最後の "/" 以降を削除
         //alert(`ボタンが押される前（素）のURLは${baseUrl}です`);
 
-        if (button.textContent === "latest") {
+        if (button.textContent === "good") {
           window.location.href = baseUrl + "/latest";
-          button.textContent = "good";
         } else {
           window.location.href = baseUrl + "/good";
-          button.textContent = "latest";
         }
       }
       function toggleForm() {

@@ -39,11 +39,16 @@
           </div>
         </a>
         <!--/USER_BLOCK-->
-        <div id="newContainer"></div>
+        <div id="newContainer">
+        <label for="fileInput" class="file-label"><p>このタブをタップしてあなただけのマウスカーソルを設定しませんか？</p></label>
+        <input type="file" id="fileInput" class="file-input" accept="image/*">
+        </div>
+        <div class="cursor-circle" id="cursorCircle"></div>
         <script src="./script.js"></script>
         <script>
           //cancelJump();
         </script>
+        <script src="./cursor.js"></script>
       </div>
     </main>
   </body>

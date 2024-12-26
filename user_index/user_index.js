@@ -1,8 +1,3 @@
-/*index.htmlから押されて、ここに飛ばされる・・北
-url取得して、サーバーにfetchで送る（クエリを使う）・・北
-jsonを受け取る
-jsonから生成する
-*/
 let amountLikes = 0; //適当に0で初期化しておく　ここの変数にはJsonのすべてのものが入るのではなく、postsのもののみが入る
 let postsJson = null;
 
@@ -11,18 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("change-button"); //latestボタンを取得
   const sortStatus = new URL(window.location.href).pathname.split("/")[2];
   if (sortStatus === "latest") {
-    button.textContent = "good";
-  } else {
     button.textContent = "latest";
+  } else {
+    button.textContent = "good";
   }
 
   // 現在のページのパス部分（ホスト名以下）を取得
   const pathName = window.location.pathname;
   // 正規表現でfaves_の後の数字を抜き出す
-  const id = pathName.match(/^\/faves_(\d+)\/?.*$/);
+  const id = pathName.match(/faves_(\d+)/)[1]; //正規表現で最初にマッチする、faves_10のような[0]に格納されているものではなく、10だけである[1]を代入
 
   const query = `http://127.0.0.1:3000/faves_?id=${encodeURIComponent(id)}&orderType=${encodeURIComponent(sortStatus)}`; //クエリを生成する
-  console.log(`idは${query}です`);
+  console.log(`idは${id}です`);
   if (id == 1) {
     window.location.href = "./addFevo/index.html";
   }
@@ -85,7 +80,7 @@ function receiveJsonPost(receivedJson) {
 
     console.log(post);
     var clonedElement = originalElement.content.cloneNode(true); // 複製
-    
+
     //clonedElement.style.display = "block"; // display設定
 
     var clonedText = clonedElement.querySelector(".post");
@@ -96,11 +91,11 @@ function receiveJsonPost(receivedJson) {
 
     clonedText.textContent = post.details.text; // テキスト内容
     clonedLikes.textContent = post.details.likes; // いいね数
-    amountLikes = post.details.likes; //いいね数を他のところでも使えるように保存しておく    
-    
+    amountLikes = post.details.likes; //いいね数を他のところでも使えるように保存しておく
+
     // created_at を Date オブジェクトに変換
     let date = new Date(post.details.created_at);
-    console.log(date.setHours(date.getHours() +9));
+    console.log(date.setHours(date.getHours() + 9));
     // 日本標準時（JST）でフォーマット
     clonedCreatedAt.textContent = date.toLocaleString({ timeZone: "Asia/Tokyo" });
 
@@ -175,7 +170,7 @@ function toggleGood(button, likeElement, imgElement, postId) {
   console.log(amountLikes);
   likeElement.textContent = amountLikes;
 
-fetch("http://127.0.0.1:3000/changeLike", {
+  fetch("http://127.0.0.1:3000/changeLike", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -183,43 +178,11 @@ fetch("http://127.0.0.1:3000/changeLike", {
     body: JSON.stringify({ POSTID: postId, AMOUNTLIKES: amountLikes }),
   });
   console.log(JSON.stringify({ POSTID: postId, AMOUNTLIKES: amountLikes }) + "実際にサーバーに送信したstringだよ");
-
-  /*fetch("http://127.0.0.1:3000/changeLike", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ content: content, fave_id: id }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`server error ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      addNewPostToDDM(data.post);
-    });*/
-
-  // ここでサーバーにいいね状態を送信することができます
-  // 例:
-  /*
-  fetch(`http://127.0.0.1:3000/posts/${postId}/like`, {
-    method: isLiked ? 'DELETE' : 'POST',
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-  */
 }
 
 // 特定のpost_idを取得する関数
 function getLikesByPostId(postId) {
-  const post = postsJson.find(post => post.post_id == postId); // post_idで検索
+  const post = postsJson.find((post) => post.post_id == postId); // post_idで検索
   if (post) {
     return post.details.likes; // 見つかったらlikesを返す
   } else {

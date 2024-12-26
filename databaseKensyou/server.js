@@ -7,7 +7,7 @@ const querystring = require("querystring");
 const sqlite3 = require("sqlite3").verbose();
 
 // データベース接続とテーブルの作成
-const db = new sqlite3.Database("users.db", (err) => {
+const db = new sqlite3.Database("database.db", (err) => {
   if (err) {
     console.error("データベース接続エラー:", err.message);
   } else {
@@ -48,7 +48,7 @@ const mimeTypes = {
 
 // サーバー設定
 const hostname = "127.0.0.1";
-const port = 3000;
+const port = 3001;
 
 // 静的ファイルを提供する関数
 function serveStaticFile(filePath, res) {
