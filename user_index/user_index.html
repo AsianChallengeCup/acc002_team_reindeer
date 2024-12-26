@@ -219,7 +219,7 @@
         </div>
         <p class="description">私はアララギ派の重鎮でございます。</p>
         <p class="sub-description">真面目にいきることでこの世界の本質をうつします</p>
-        <button class="change-button" onclick="toggleDescription()" id="change-button">latest</button>
+        <a href="" id="change-button"><button class="change-button">latest</button></a>
         <p>投稿の並び順を変更する</p>
       </div>
 
@@ -249,17 +249,6 @@
     <script>
       let isTruck = false;
 
-      function toggleDescription() {
-        var button = document.getElementById("change-button");
-        const baseUrl = window.location.href.replace(/\/[^/]*$/, ""); // 現在のURLを取得して、最後の "/" 以降を削除
-        //alert(`ボタンが押される前（素）のURLは${baseUrl}です`);
-
-        if (button.textContent === "good") {
-          window.location.href = baseUrl + "/latest";
-        } else {
-          window.location.href = baseUrl + "/good";
-        }
-      }
       function toggleForm() {
         var form = document.getElementById("text");
         var buttonImage = document.getElementById("button-img");

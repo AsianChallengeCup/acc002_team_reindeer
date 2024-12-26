@@ -97,7 +97,7 @@ function fetchFaves(count) {
 
 function cloneFromJson(data) {
   try {
-    console.log(data);
+    //console.log(data);
     faves = JSON.parse(data).faves; // 取得したユーザー情報
 
     //favesContainer = document.getElementById("faves-container"); // ユーザー情報を表示する要素
@@ -135,6 +135,7 @@ function cloneFromJson(data) {
       var clonedText = clonedElement.querySelector(".card-media-body-supporting-bottom-text");
       var clonedHoverText = clonedElement.querySelector(".card-media-body-supporting-bottom.card-media-body-supporting-bottom-reveal .card-media-body-supporting-bottom-text.subtle");
 
+      clonedElement.href = `http://127.0.0.1:3000/faves_${fave.fave_id}/latest`; //クローンされたもののhrefを変更する
       clonedElement.id = fave.fave_id; // id変更
       clonedName.textContent = fave.details.name; // 名前
       clonedGroup.textContent = fave.details.group; // 所属名
@@ -145,17 +146,6 @@ function cloneFromJson(data) {
 
       // debug: 複製された要素が正しく追加されているかを確認
       console.log(clonedElement);
-    });
-
-    // クリックイベント
-    document.querySelectorAll("a.user-link").forEach((link) => {
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-        const clickedId = event.currentTarget.id;
-        console.log(`Clicked text: ${clickedId}`);
-        window.location.href = "http://127.0.0.1:3000/faves_" + clickedId + "/latest";
-        //alert(`Clicked text: ${clickedId}`);
-      });
     });
   } catch (error) {
     console.error("Error fetching faves:", error);

@@ -3,12 +3,17 @@ let postsJson = null;
 
 document.addEventListener("DOMContentLoaded", function () {
   //ボタンを現在のurlから初期化
-  var button = document.getElementById("change-button"); //latestボタンを取得
+  const link = document.getElementById("change-button"); // <a> タグを取得
+  const button = link.querySelector("button"); // <a> タグ内の <button> を取得
+
   const sortStatus = new URL(window.location.href).pathname.split("/")[2];
+  const baseUrl = window.location.href.replace(/\/[^/]*$/, ""); // 現在のURLを取得して、最後の "/" 以降を削除
   if (sortStatus === "latest") {
-    button.textContent = "latest";
+    button.textContent = "latest"; //テキストではどのソート状態にいるのか表示
+    link.href = baseUrl + "/good"; //hrefでは押したときのソートURLにする
   } else {
     button.textContent = "good";
+    link.href = baseUrl + "/latest"; //hrefでは押したときのソートURLにする
   }
 
   // 現在のページのパス部分（ホスト名以下）を取得
